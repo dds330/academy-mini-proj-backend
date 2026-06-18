@@ -1,7 +1,6 @@
 import {Request, Response} from 'express';
 import { ExpenseService } from '../services/expenseService.js';
 import { ExpenseResponseDto, CreateExpenseRequestDto } from '../dtos/expenseDto.js';
-import {Expense} from '../models/expense';
 
 export class ExpenseController {
     constructor(private expenseService: ExpenseService) {}

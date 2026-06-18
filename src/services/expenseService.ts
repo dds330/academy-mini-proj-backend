@@ -1,3 +1,4 @@
+import { CreateExpenseRequestDto } from "../dtos/expenseDto";
 import { Expense } from "../models/expense";
 const mockExpenses: Expense[] = [
     { "id": 1, 
@@ -33,7 +34,7 @@ export class ExpenseService {
         }
     }
 
-    async create(expense: Omit<Expense, "id">): Promise<Expense> {
+    async create(expense: CreateExpenseRequestDto): Promise<Expense> {
         const newExpense = {
             "id": mockExpenses.length + 1,
             "date": expense.date,
@@ -45,7 +46,7 @@ export class ExpenseService {
         return newExpense;
     }
 
-    async update(id: number, expense: Omit<Expense, "id">): Promise<Expense | undefined> {
+    async update(id: number, expense: CreateExpenseRequestDto): Promise<Expense | undefined> {
         const index = mockExpenses.findIndex(e => e.id === id);
         if(index < mockExpenses.length && index >= 0) {
             const updatedExpense = {
