@@ -1,30 +1,31 @@
-const mockExpenses: any[] = [
+import { Expense } from "../models/expense";
+const mockExpenses: Expense[] = [
     { "id": 1, 
     "date": "20-10-2025",
     "description": "Academy induction",
-    "amount": "100",
+    "amount": 100,
     "user": "Dhruvi"
    },
    { "id": 2, 
     "date": "01-09-2025",
     "description": "Client Lunch",
-    "amount": "75",
+    "amount": 75,
     "user": "Alicia"
    },
    { "id": 3, 
     "date": "31-05-2025",
     "description": "Soccer Viewing",
-    "amount": "300",
+    "amount": 300,
     "user": "Conrad"
    }
 ];
 
 export class ExpenseService {
-    async findAll(): Promise<any[]> {
+    async findAll(): Promise<Expense[]> {
         return mockExpenses;
     }
 
-    async findByID(id: number): Promise<any> {
+    async findByID(id: number): Promise<Expense | undefined> {
         if(id < mockExpenses.length && id > 0) {
             return mockExpenses[id - 1];
         } else {
@@ -32,7 +33,7 @@ export class ExpenseService {
         }
     }
 
-    async create(expense: any): Promise<any> {
+    async create(expense: Omit<Expense, "id">): Promise<Expense> {
         const newExpense = {
             "id": mockExpenses.length + 1,
             "date": expense.date,
@@ -44,7 +45,7 @@ export class ExpenseService {
         return newExpense;
     }
 
-    async update(id: number, expense: any): Promise<any> {
+    async update(id: number, expense: Omit<Expense, "id">): Promise<Expense | undefined> {
         const index = mockExpenses.findIndex(e => e.id === id);
         if(index < mockExpenses.length && index >= 0) {
             const updatedExpense = {
