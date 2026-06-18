@@ -7,7 +7,7 @@ const PORT = 3000;
 
 // Middleware
 app.use(express.json());
-app.use("/api", expenseRouter);
+app.use("/api/expenses", expenseRouter);
 
 // Start server
 app.listen(PORT, () => {
