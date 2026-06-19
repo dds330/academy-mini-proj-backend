@@ -31,7 +31,7 @@ export class ExpenseService {
 
     async findByID(id: number): Promise<Expense | undefined> {
         if(id < mockExpenses.length && id > 0) {
-            return mockExpenses[id - 1];
+            return mockExpenses.find(e => e.id === id);
         } else {
             return undefined;
         }
