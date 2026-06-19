@@ -2,19 +2,19 @@ import { CreateExpenseRequestDto } from "../dtos/expenseDto";
 import { Expense } from "../models/expense";
 const mockExpenses: Expense[] = [
     { "id": 1, 
-    "date": "20-10-2025",
+    "date": new Date(2025, 9, 20),
     "description": "Academy induction",
     "amount": 100,
     "user": "Dhruvi"
    },
    { "id": 2, 
-    "date": "01-09-2025",
+    "date": new Date(2025, 8, 1),
     "description": "Client Lunch",
     "amount": 75,
     "user": "Alicia"
    },
    { "id": 3, 
-    "date": "31-05-2025",
+    "date": new Date(2025, 4, 31),
     "description": "Soccer Viewing",
     "amount": 300,
     "user": "Conrad"
