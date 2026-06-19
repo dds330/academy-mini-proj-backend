@@ -47,7 +47,7 @@ export function validateQuery<T extends ZodSchema>(schema: T): RequestHandler<an
             });
             return;
         }
-        req.query = result.data as ParsedQs; // replace query with validated, typed data
+        res.locals.validatedQuery = result.data; // replace query with validated, typed data
         next();
     };
 }

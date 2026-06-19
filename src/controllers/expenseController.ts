@@ -1,12 +1,13 @@
 import {Request, Response} from 'express';
 import { ExpenseService } from '../services/expenseService.js';
-import { ExpenseResponseDto, CreateExpenseRequestDto} from '../dtos/expenseDto.js';
+import { ExpenseResponseDto, CreateExpenseRequestDto, ExpenseQueryDto} from '../dtos/expenseDto.js';
 
 export class ExpenseController {
     constructor(private expenseService: ExpenseService) {}
 
     async getAll(req: Request, res: Response): Promise<void> {
-        const expenses = await this.expenseService.findAll();
+        const {minAmount} = res.locals.validatedQuery as ExpenseQueryDto;
+        const expenses = await this.expenseService.findAll(minAmount);
         const ExpenseResponseDtos: ExpenseResponseDto[] = expenses.map(e => ({
             id: e.id,
             date: e.date,

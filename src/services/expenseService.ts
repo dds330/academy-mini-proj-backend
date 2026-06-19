@@ -22,7 +22,10 @@ const mockExpenses: Expense[] = [
 ];
 
 export class ExpenseService {
-    async findAll(): Promise<Expense[]> {
+    async findAll(minAmount?: number): Promise<Expense[]> {
+        if (minAmount !== undefined) {
+            return mockExpenses.filter(expense => expense.amount >= minAmount);
+        } 
         return mockExpenses;
     }
 

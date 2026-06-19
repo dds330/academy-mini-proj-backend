@@ -21,3 +21,9 @@ export interface ExpenseResponseDto {
     amount: number;
     user: string;
 }
+
+export const ExpenseQuerySchema = z.object({
+    minAmount: z.coerce.number().min(0, "Minimum amount must be a positive number").optional(),
+});
+
+export type ExpenseQueryDto = z.infer<typeof ExpenseQuerySchema>;
