@@ -5,7 +5,7 @@ import { ExpenseResponseDto, CreateExpenseRequestDto } from '../dtos/expenseDto.
 export class ExpenseController {
     constructor(private expenseService: ExpenseService) {}
 
-    async getAll(req: Request, res: Response): Promise<any> {
+    async getAll(req: Request, res: Response): Promise<void> {
         const expenses = await this.expenseService.findAll();
         const ExpenseResponseDtos = expenses.map(e => ({
             id: e.id,
@@ -17,7 +17,7 @@ export class ExpenseController {
         res.status(200).json(ExpenseResponseDtos);
     }
 
-    async getById(req: Request, res: Response): Promise<any> {
+    async getById(req: Request, res: Response): Promise<void> {
         const id = Number(req.params.id);
         if(isNaN(id)) {
             res.status(400).json({ message: "ID must be a number" });
@@ -34,10 +34,10 @@ export class ExpenseController {
         }
     }
 
-    async create(req: Request, res: Response): Promise<any> {
+    async create(req: Request, res: Response): Promise<void> {
         const body: CreateExpenseRequestDto = req.body;
         if(!body.date || !body.description || !body.amount || !body.user) {
-            res.status(400).json({ message: "Missing required fields" });
+            res.status(400).json({ message: "Date, description, amount, and user are required" });
             return;
         }
         const expense = await this.expenseService.create(body);
@@ -45,7 +45,7 @@ export class ExpenseController {
         res.status(201).json(dto);
     }
 
-    async update(req: Request, res: Response): Promise<any> {
+    async update(req: Request, res: Response): Promise<void> {
         const id = Number(req.params.id);
         if(isNaN(id)) {
             res.status(400).json({ message: "Invalid ID" });
@@ -61,7 +61,7 @@ export class ExpenseController {
         }
     }
 
-    async delete(req: Request, res: Response): Promise<any> {
+    async delete(req: Request, res: Response): Promise<void> {
         const id = Number(req.params.id);
         if(isNaN(id)) {
             res.status(400).json({ message: "Invalid ID" });
