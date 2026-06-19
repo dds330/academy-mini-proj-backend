@@ -1,13 +1,7 @@
 
-import express from "express";
-import expenseRouter from "./routes/expenseRouter.js";
+import { app } from './app.js';
 
-const app = express();
-const PORT = 3000;
-
-// Middleware
-app.use(express.json());
-app.use("/api/expenses", expenseRouter);
+const PORT = process.env.PORT || 3000;
 
 // Start server
 app.listen(PORT, () => {

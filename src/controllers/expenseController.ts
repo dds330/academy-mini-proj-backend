@@ -5,38 +5,56 @@ import { ExpenseResponseDto, CreateExpenseRequestDto, ExpenseQueryDto} from '../
 export class ExpenseController {
     constructor(private expenseService: ExpenseService) {}
 
+
     async getAll(req: Request, res: Response): Promise<void> {
-        const {minAmount} = res.locals.validatedQuery as ExpenseQueryDto;
-        const expenses = await this.expenseService.findAll(minAmount);
-        const ExpenseResponseDtos: ExpenseResponseDto[] = expenses.map(e => ({
-            id: e.id,
-            date: e.date,
-            description: e.description,
-            amount: e.amount,
-            user: e.user
-        }));
+        try{
+            const {minAmount} = res.locals.validatedQuery as ExpenseQueryDto;
+            const expenses = await this.expenseService.findAll(minAmount);
+            const ExpenseResponseDtos: ExpenseResponseDto[] = expenses.map(e => ({
+                id: e.id,
+                date: e.date,
+                description: e.description,
+                amount: e.amount,
+                user: e.user
+            }));
         res.status(200).json(ExpenseResponseDtos);
+        }
+        catch(error) {
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+        
     }
 
     async getById(req: Request, res: Response): Promise<void> {
-        const id = Number(req.params.id);
+        try{
+            const id = Number(req.params.id);
+            const expense = await this.expenseService.findByID(id);
 
-        const expense = await this.expenseService.findByID(id);
+            if (expense) {
+                const expenseDto : ExpenseResponseDto = { id: expense.id, date: expense.date, description: expense.description, amount: expense.amount, user: expense.user };
+                res.status(200).json(expenseDto);
 
-        if (expense) {
-            const expenseDto : ExpenseResponseDto = { id: expense.id, date: expense.date, description: expense.description, amount: expense.amount, user: expense.user };
-            res.status(200).json(expenseDto);
-
-        } else {
-            res.status(404).json({ message: "Expense not found" });
+            } else if(isNaN(id)) {
+                res.status(400).json({ message: "Invalid ID parameter" });
+            } else {
+                res.status(404).json({ message: "Expense not found" });
+            }
+        }
+        catch(error) {
+            res.status(500).json({ message: "Internal Server Error" });
         }
     }
 
     async create(req: Request, res: Response): Promise<void> {
-        const body: CreateExpenseRequestDto = req.body;
-        const expense = await this.expenseService.create(body);
-        const dto : ExpenseResponseDto = { id: expense.id, date: expense.date, description: expense.description, amount: expense.amount, user: expense.user };
-        res.status(201).json(dto);
+        try{
+            const body: CreateExpenseRequestDto = req.body;
+            const expense = await this.expenseService.create(body);
+            const dto : ExpenseResponseDto = { id: expense.id, date: expense.date, description: expense.description, amount: expense.amount, user: expense.user };
+            res.status(201).json(dto);
+        }
+        catch(error) {
+            res.status(500).json({ message: "Internal Server Error" });
+        }
     }
 
     async update(req: Request, res: Response): Promise<void> {
