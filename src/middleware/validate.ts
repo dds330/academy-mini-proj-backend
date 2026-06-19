@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { z, ZodSchema } from "zod";
+import {ParsedQs} from "qs";
 
 export function validateBody(schema: ZodSchema): RequestHandler {
     return (req, res, next) => {
@@ -30,6 +31,23 @@ export function validateParams(schema: ZodSchema): RequestHandler {
             });
             return;
         }
+        next();
+    };
+}
+
+export function validateQuery<T extends ZodSchema>(schema: T): RequestHandler<any, any, any, ParsedQs> {
+    return (req, res, next) => {
+        const result = schema.safeParse(req.query);
+        if (!result.success) {
+            res.status(400).json({
+                errors: result.error.issues.map((issue) => ({
+                    field: issue.path.join("."),
+                    message: issue.message,
+                })),
+            });
+            return;
+        }
+        req.query = result.data as ParsedQs; // replace query with validated, typed data
         next();
     };
 }
