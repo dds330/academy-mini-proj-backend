@@ -45,4 +45,12 @@ describe("ExpenseController", () => {
         expect(mockRes.status).toHaveBeenCalledWith(200);
         expect(mockRes.json).toHaveBeenCalledWith(expense);
     });
+
+    //should get 500 when service throws an error
+    it("should handle errors in getAll", async () => {
+        mockService.findAll = vi.fn().mockRejectedValue(new Error("Test Error"));
+        await controller.getAll(mockReq, mockRes);
+        expect(mockRes.status).toHaveBeenCalledWith(500);
+        expect(mockRes.json).toHaveBeenCalledWith({ message: "Internal Server Error" });
+    });
 });
